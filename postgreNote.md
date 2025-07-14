@@ -771,4 +771,201 @@ PostgreSQL offers a rich set of string functions to manipulate text. These are e
 
 #### `LENGTH()`
 ```sql
-SELECT LENGTH('PostgreSQL');  -- 10
+SELECT LENGTH('PostgreSQL');
+
+```
+---
+---
+
+## 🎭 PostgreSQL `CASE` Expression – Complete Guide
+
+The `CASE` expression in PostgreSQL allows you to implement **conditional logic** within `SELECT`, `UPDATE`, `ORDER BY`, and more.
+
+---
+
+### 🧠 Syntax
+
+```sql
+CASE
+    WHEN condition1 THEN result1
+    WHEN condition2 THEN result2
+    ...
+    ELSE default_result
+END
+```
+
+- **WHEN**: the condition to check  
+- **THEN**: the result returned if the condition is true  
+- **ELSE**: (optional) default result if no conditions match
+
+---
+
+### ✅ Example 1 – Use in `SELECT`
+
+```sql
+SELECT name, marks,
+    CASE
+        WHEN marks >= 80 THEN 'A+'
+        WHEN marks >= 70 THEN 'A'
+        WHEN marks >= 60 THEN 'B'
+        WHEN marks >= 50 THEN 'C'
+        ELSE 'F'
+    END AS grade
+FROM students;
+```
+
+📌 This returns a new column `grade` based on the value of `marks`.
+
+---
+
+### ✅ Example 2 – Use in `ORDER BY`
+
+```sql
+SELECT name, role FROM employees
+ORDER BY
+    CASE 
+        WHEN role = 'Manager' THEN 1
+        WHEN role = 'Team Lead' THEN 2
+        ELSE 3
+    END;
+```
+
+📌 Sorts results based on a custom priority rather than alphabetical order.
+
+---
+
+### ✅ Example 3 – Use in `UPDATE`
+
+```sql
+UPDATE students
+SET remarks = 
+    CASE
+        WHEN grade = 'A+' THEN 'Excellent'
+        WHEN grade = 'A' THEN 'Very Good'
+        WHEN grade = 'B' THEN 'Good'
+        ELSE 'Needs Improvement'
+    END;
+```
+
+📌 Conditionally updates the `remarks` column based on the value of `grade`.
+
+---
+
+### 💡 Notes
+
+- `CASE` is similar to `if-else` logic.
+- You can use `CASE` inside `SELECT`, `WHERE`, `ORDER BY`, `GROUP BY`, `UPDATE`, etc.
+- `ELSE` is optional, but recommended to handle all unexpected values.
+
+---
+
+
+## 🔗 PostgreSQL FOREIGN KEY – Complete Guide
+
+A **FOREIGN KEY** in PostgreSQL is a constraint used to link two tables. It ensures the values in one table column exist in another table’s column — enforcing **referential integrity**.
+
+---
+
+### 📚 Syntax
+
+```sql
+-- While creating a table
+CREATE TABLE child_table (
+    column_name data_type,
+    ...
+    FOREIGN KEY (column_name) REFERENCES parent_table (parent_column)
+);
+
+-- Or named foreign key
+CREATE TABLE child_table (
+    column_name data_type,
+    ...
+    CONSTRAINT fk_name FOREIGN KEY (column_name)
+    REFERENCES parent_table (parent_column)
+);
+```
+
+```sql
+-- Add foreign key to existing table
+ALTER TABLE child_table
+ADD CONSTRAINT fk_name FOREIGN KEY (column_name)
+REFERENCES parent_table (parent_column);
+```
+
+---
+
+### ✅ Example 1 – Basic Foreign Key
+
+```sql
+CREATE TABLE departments (
+    dept_id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE employees (
+    emp_id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    dept_id INT,
+    FOREIGN KEY (dept_id) REFERENCES departments(dept_id)
+);
+```
+
+---
+
+### ✅ Example 2 – Named Foreign Key
+
+```sql
+CREATE TABLE orders (
+    order_id SERIAL PRIMARY KEY,
+    customer_id INT,
+    CONSTRAINT fk_customer FOREIGN KEY (customer_id)
+    REFERENCES customers(id)
+);
+```
+
+---
+
+### ✅ Example 3 – ALTER TABLE Add Foreign Key
+
+```sql
+ALTER TABLE orders
+ADD CONSTRAINT fk_customer
+FOREIGN KEY (customer_id) REFERENCES customers(id);
+```
+
+---
+
+### ✅ Example 4 – FOREIGN KEY with ON DELETE/UPDATE Actions
+
+```sql
+CREATE TABLE orders (
+    order_id SERIAL PRIMARY KEY,
+    customer_id INT,
+    FOREIGN KEY (customer_id) REFERENCES customers(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+```
+
+🔸 `ON DELETE CASCADE` – deletes related rows in child table  
+🔸 `ON UPDATE CASCADE` – updates foreign keys if parent key changes
+
+---
+
+### ❌ Drop Foreign Key
+
+```sql
+ALTER TABLE orders
+DROP CONSTRAINT fk_customer;
+```
+
+---
+
+### 🧠 Notes
+
+- Foreign keys must match the data type and constraints of the referenced column.
+- The referenced column must be a **PRIMARY KEY** or **UNIQUE**.
+- Adding indexes on foreign key columns improves performance.
+- Use meaningful names for constraints like `fk_customer_order`.
+
+---
