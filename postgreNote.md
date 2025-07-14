@@ -423,3 +423,38 @@ SELECT name,
        END AS letter_grade
 FROM students;
 ```
+---
+
+---
+
+
+# 📊 PostgreSQL Aggregate Functions – Complete Reference
+
+Aggregate functions perform a **calculation on a set of values** and return a single result. They're commonly used with `GROUP BY`.
+
+---
+
+## 🔢 List of Aggregate Functions
+
+| Function       | Description                             |
+|----------------|-----------------------------------------|
+| `COUNT()`      | Counts number of rows                   |
+| `SUM()`        | Calculates the total sum of a column    |
+| `AVG()`        | Calculates the average value            |
+| `MIN()`        | Finds the minimum value                 |
+| `MAX()`        | Finds the maximum value                 |
+| `STRING_AGG()` | Concatenates strings into one value    |
+| `ARRAY_AGG()`  | Aggregates values into an array         |
+| `BOOL_AND()`   | Returns true if all values are true     |
+| `BOOL_OR()`    | Returns true if any value is true       |
+| `STDDEV()`     | Calculates the standard deviation       |
+| `VARIANCE()`   | Calculates the variance                 |
+
+---
+
+## 🧮 Examples
+
+### `COUNT()`
+```sql
+SELECT COUNT(*) FROM employees;
+SELECT department, COUNT(*) FROM employees GROUP BY department;
