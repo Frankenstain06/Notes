@@ -286,46 +286,71 @@
         </header>
 
         <div class="notes-grid">
-            <a href="DSA.md" class="note-card">
+            <a href="DSA.md" class="note-card" onclick="openNote(event, 'DSA.md')">
                 <div class="note-icon">🧮</div>
                 <h2 class="note-title">Data Structures & Algorithms</h2>
                 <p class="note-description">Comprehensive notes on DSA concepts including greedy algorithms, time complexity, searching, and sorting techniques.</p>
+                
             </a>
 
-            <a href="COMPETITIVE PROGRAMMING LEARNING.md" class="note-card">
+            <a href="COMPETITIVE PROGRAMMING LEARNING.md" class="note-card" onclick="openNote(event, 'COMPETITIVE PROGRAMMING LEARNING.md')">
                 <div class="note-icon">🏆</div>
                 <h2 class="note-title">Competitive Programming</h2>
                 <p class="note-description">Tips, tricks, and learning resources for competitive programming challenges.</p>
             </a>
 
-            <a href="Number_Theory.md" class="note-card">
+            <a href="Number_Theory.md" class="note-card" onclick="openNote(event, 'Number_Theory.md')">
                 <div class="note-icon">🔢</div>
                 <h2 class="note-title">Number Theory</h2>
                 <p class="note-description">Mathematical concepts and algorithms related to number theory for programming.</p>
             </a>
 
-            <a href="Math.md" class="note-card">
+            <a href="Math.md" class="note-card" onclick="openNote(event, 'Math.md')">
                 <div class="note-icon">📐</div>
                 <h2 class="note-title">Mathematics</h2>
                 <p class="note-description">Essential mathematical concepts and formulas for problem solving.</p>
             </a>
-
-            <a href="Python.md" class="note-card">
+            <a href="Python.md" class="note-card" onclick="openNote(event, 'Python.md')">
                 <div class="note-icon">🐍</div>
                 <h2 class="note-title">Python</h2>
                 <p class="note-description">Python programming language notes, tips, and code snippets.</p>
             </a>
 
-            <a href="postgreNote.md" class="note-card">
+            <a href="postgreNote.md" class="note-card" onclick="openNote(event, 'postgreNote.md')">
                 <div class="note-icon">🐘</div>
                 <h2 class="note-title">PostgreSQL</h2>
                 <p class="note-description">Database concepts and PostgreSQL specific notes and queries.</p>
             </a>
+    </div>
+        <div id="content-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:100; overflow-y:auto; padding:50px;">
+            <button onclick="closeNote()" style="position:fixed; top:20px; right:20px; padding:10px 20px; cursor:pointer; border-radius:10px; border:none; background:#fff; font-weight:bold;">Close [X]</button>
+            <div id="note-body" class="note-card" style="max-width:800px; margin:0 auto; background:#fff; color:#333;">
         </div>
-
+    </div>
         <footer>
             <p>Made with ❤️ | <a href="https://github.com/Frankenstain06/Notes">View on GitHub</a></p>
         </footer>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        function openNote(event, filename) {
+            event.preventDefault(); // Stop it from opening the raw file
+            const overlay = document.getElementById('content-overlay');
+            const body = document.getElementById('note-body');
+
+            fetch(filename)
+              .then(response => response.text())
+              .then(text => {
+                 body.innerHTML = marked.parse(text); // Converts MD to HTML
+                    overlay.style.display = 'block';
+                    document.body.style.overflow = 'hidden'; // Stop background scrolling
+             });
+        }
+
+        function closeNote() {
+        document.getElementById('content-overlay').style.display = 'none';
+        document.body.style.overflow = 'auto';
+        }
+    </script>
 </body>
 </html>
