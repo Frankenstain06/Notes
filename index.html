@@ -718,7 +718,7 @@
             }
         });
 
-        // Animated Favicon - Rotating logo effect
+        // Animated Favicon - Pre-generated frames for smooth performance
         (function animateFavicon() {
             const favicon = document.querySelector('link[rel="icon"]');
             const img = new Image();
@@ -731,19 +731,26 @@
                 canvas.width = size;
                 canvas.height = size;
                 
-                let angle = 0;
+                // Pre-generate all frames for smooth animation
+                const frames = [];
+                const totalFrames = 12; // 12 frames = 30 degree steps
                 
-                setInterval(() => {
+                for (let i = 0; i < totalFrames; i++) {
                     ctx.clearRect(0, 0, size, size);
                     ctx.save();
                     ctx.translate(size / 2, size / 2);
-                    ctx.rotate(angle * Math.PI / 180);
+                    ctx.rotate((i * 30) * Math.PI / 180);
                     ctx.drawImage(img, -size / 2, -size / 2, size, size);
                     ctx.restore();
-                    
-                    favicon.href = canvas.toDataURL('image/png');
-                    angle = (angle + 10) % 360;
-                }, 100);
+                    frames.push(canvas.toDataURL('image/png'));
+                }
+                
+                // Animate using cached frames - no CPU work during animation
+                let frame = 0;
+                setInterval(() => {
+                    favicon.href = frames[frame];
+                    frame = (frame + 1) % totalFrames;
+                }, 150);
             };
         })();
     </script>
