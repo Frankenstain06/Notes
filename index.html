@@ -16,9 +16,9 @@
             min-height: 100vh;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            background-attachment: fixed;
             position: relative;
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
         /* Animated background particles */
@@ -40,6 +40,7 @@
             background: rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             animation: float 15s infinite ease-in-out;
+            will-change: transform, opacity;
         }
 
         .particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 12s; }
@@ -79,36 +80,32 @@
         .orb {
             position: fixed;
             border-radius: 50%;
-            filter: blur(60px);
             z-index: 0;
-            animation: pulse 8s infinite ease-in-out;
+            will-change: transform, opacity;
         }
 
         .orb-1 {
             width: 300px;
             height: 300px;
-            background: rgba(102, 126, 234, 0.4);
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.4) 0%, transparent 70%);
             top: 10%;
             left: 10%;
-            animation-delay: 0s;
         }
 
         .orb-2 {
             width: 250px;
             height: 250px;
-            background: rgba(240, 147, 251, 0.4);
+            background: radial-gradient(circle, rgba(240, 147, 251, 0.4) 0%, transparent 70%);
             top: 60%;
             right: 10%;
-            animation-delay: 2s;
         }
 
         .orb-3 {
             width: 200px;
             height: 200px;
-            background: rgba(118, 75, 162, 0.4);
+            background: radial-gradient(circle, rgba(118, 75, 162, 0.4) 0%, transparent 70%);
             bottom: 20%;
             left: 30%;
-            animation-delay: 4s;
         }
 
         @keyframes pulse {
@@ -180,15 +177,15 @@
         }
 
         .note-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 20px;
             padding: 30px;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             animation: fadeIn 0.6s ease-out both;
             text-decoration: none;
             display: block;
+            will-change: transform;
         }
 
         .note-card:nth-child(1) { animation-delay: 0.1s; }
@@ -718,41 +715,7 @@
             }
         });
 
-        // Animated Favicon - Pre-generated frames for smooth performance
-        (function animateFavicon() {
-            const favicon = document.querySelector('link[rel="icon"]');
-            const img = new Image();
-            img.src = './photo/a.png';
-            
-            img.onload = function() {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                const size = 32;
-                canvas.width = size;
-                canvas.height = size;
-                
-                // Pre-generate all frames for smooth animation
-                const frames = [];
-                const totalFrames = 12; // 12 frames = 30 degree steps
-                
-                for (let i = 0; i < totalFrames; i++) {
-                    ctx.clearRect(0, 0, size, size);
-                    ctx.save();
-                    ctx.translate(size / 2, size / 2);
-                    ctx.rotate((i * 30) * Math.PI / 180);
-                    ctx.drawImage(img, -size / 2, -size / 2, size, size);
-                    ctx.restore();
-                    frames.push(canvas.toDataURL('image/png'));
-                }
-                
-                // Animate using cached frames - no CPU work during animation
-                let frame = 0;
-                setInterval(() => {
-                    favicon.href = frames[frame];
-                    frame = (frame + 1) % totalFrames;
-                }, 150);
-            };
-        })();
+
     </script>
 </body>
 </html>
